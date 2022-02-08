@@ -35,9 +35,7 @@ export const protect = async (req: Request, res: Response, next) => {
 export const authorize = (...roles: UserRole[]) => {
 	return async (req: Request, res: Response, next) => {
 		if (!roles.includes(req.body.user?.role)) {
-			return next(
-				new ErrorResponse(`User role ${req.body.user.role} is not authorized to access this resource`, 403)
-			);
+			return next(new ErrorResponse(`You are not authorized to access this resource`, 403));
 		}
 		next();
 	};

@@ -37,14 +37,20 @@ export const addItemToBasket = asyncHandler(async (req: Request, res: Response, 
 	let basketItem: BasketItem | Reference<BasketItem>;
 	basketItem = await DI.basketItemRepository.findOne({ item: item });
 
+	// check for valid input for quantity property
+	if (req.body.quantity && !/^[1-9]+$/.test(req.body.quantity))
+		return next(new ErrorResponse(`Invalid input for property quantity; must be a number`, 400));
+
+	var quantity = parseInt(req.body.quantity, 10);
+
 	if (!basketItem) {
 		basketItem = new BasketItem();
-		wrap(basketItem).assign({ item, quantity: 1 }, { em: DI.em });
+		wrap(basketItem).assign({ item, quantity: quantity || 1 }, { em: DI.em });
 		DI.basketItemRepository.persist(basketItem);
 	} else if (!basketItem.active) {
-		wrap(basketItem).assign({ id: basketItem.id, active: true, quantity: 1 });
+		wrap(basketItem).assign({ id: basketItem.id, active: true, quantity: quantity || 1 });
 	} else {
-		wrap(basketItem).assign({ id: basketItem.id, quantity: basketItem.quantity + 1 });
+		wrap(basketItem).assign({ id: basketItem.id, quantity: basketItem.quantity + (quantity || 1) });
 	}
 
 	basket.basketItems.add(basketItem);
@@ -59,8 +65,45 @@ export const addItemToBasket = asyncHandler(async (req: Request, res: Response, 
 });
 
 /**
+ *  @desc     Change the quantity of an item in the basket
+ *  @route   PATCH /customers/items/:id
+ *  @access  Logged in customer
+ * */
+export const modifyItemQuantity = asyncHandler(async (req: Request, res: Response, next) => {
+	// find the item from the user's active basket
+	var basketItem = await DI.basketItemRepository.findOne({
+		basket: { user: req.body.user, checkedOut: false },
+		item: { id: parseInt(req.params.id) },
+		active: true
+	});
+
+	if (!basketItem) return next(new ErrorResponse(`Item with id ${req.params.id} not added to basket`, 400));
+
+	// check for valid input for quantity property
+	if (!/^[1-9]+$/.test(req.body.quantity))
+		return next(new ErrorResponse(`Invalid input for property quantity; must be a number`, 400));
+
+	// set the basket item quantity to quantity from the request
+	var quantity = parseInt(req.body.quantity, 10);
+	basketItem.quantity = quantity;
+
+	await DI.basketItemRepository.flush();
+
+	const basketItems = await DI.basketItemRepository.find(
+		{ basket: basketItem.basket, active: true },
+		{ fields: ["quantity", "item"] }
+	);
+
+	res.status(200).json({
+		success: true,
+		message: "Items was successfully removed from basket.",
+		data: { basketItems }
+	});
+});
+
+/**
  *  @desc      Remove an item from basket
- *  @route     DELETE /customers/items/iId
+ *  @route     DELETE /customers/items/:id
  *  @access    Logged in customer
  * */
 export const removeItemFromBasket = asyncHandler(async (req: Request, res: Response, next) => {
@@ -77,7 +120,6 @@ export const removeItemFromBasket = asyncHandler(async (req: Request, res: Respo
 	basketItem.active = false;
 
 	await DI.basketItemRepository.flush();
-	DI.em.map;
 
 	const basketItems = await DI.basketItemRepository.find(
 		{ basket: basketItem.basket, active: true },

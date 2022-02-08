@@ -1,0 +1,52 @@
+version: "3"
+services:
+    basket-tracker-app:
+        container_name: basket-tracker-app
+        build:
+            context: .
+            dockerfile: .Dockerfile
+        depends_on:
+            - postgres
+        environment:
+            DATABASE_URL: postgres://postgres:BAsketTrAckErApP@postgres:5439/basketTrackerDB
+            NODE_ENV: production
+            PORT: 4000
+            MIKRO_ORM_TYPE: postgresql
+            MIKRO_ORM_HOST: postgres
+            MIKRO_ORM_PORT: 5432
+            MIKRO_ORM_USER: postgres
+            MIKRO_ORM_PASSWORD: BAsketTrAckErApP
+            MIKRO_ORM_DB_NAME: BasketTrackerDB
+            JWT_SECRET: BasKetTRacKeRApp
+            JWT_EXPIRE: 7d
+        ports:
+            - "4000:4000"
+    postgres:
+        container_name: postgres
+        image: postgres:10.4
+        ports:
+            - "5439:5439"
+        volumes:
+            - ~/postgresdata:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: BAsketTrAckErApP
+            POSTGRES_DB: BasketTrackerDB
+    pgadmin:
+        container_name: pgadmin
+        image: dpage/pgadmin4:4.18
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@baskettracker.com
+            PGADMIN_DEFAULT_PASSWORD: ADminPG
+            PGADMIN_LISTEN_PORT: 80
+        ports:
+            - "8081:80"
+        volumes:
+            - pgadmin-data:/var/lib/pgadmin
+        depends_on:
+            - postgres
+volumes:
+    db-data:
+    pgadmin-data:

@@ -1,5 +1,4 @@
 import { Entity, ManyToOne, Property } from "@mikro-orm/core";
-import { hidden } from "colors";
 import { Basket, Item } from ".";
 import { BaseEntity } from "./BaseEntity";
 
@@ -8,7 +7,7 @@ export class BasketItem extends BaseEntity {
 	@Property()
 	quantity!: number;
 
-	@Property()
+	@Property({ hidden: true })
 	active: boolean = true;
 
 	@ManyToOne(() => Item, { wrappedReference: true, nullable: false })

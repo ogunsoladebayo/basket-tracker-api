@@ -13,6 +13,7 @@ dotenv.config();
 // import routes
 import { authRoutes } from "./routes";
 import { itemsRoutes as customersRoutes } from "./routes/items";
+import { ItemSeeder } from "./seeders/item.seeder";
 
 export const DI = {} as {
 	orm: MikroORM;
@@ -26,7 +27,23 @@ export const DI = {} as {
 colors.enable();
 export const app = express();
 
-MikroORM.init().then((orm) => {
+(async () => {
+	const orm = await MikroORM.init({
+		entities: ["./dist/entities"],
+		entitiesTs: ["./src/entities"],
+		migrations: {
+			path: "./dist/migrations",
+			pathTs: "./src/migrations"
+		}
+	});
+
+	const migrator = orm.getMigrator();
+	await migrator.createMigration();
+	await migrator.up();
+
+	const seeder = orm.getSeeder();
+	await seeder.seed(ItemSeeder);
+
 	DI.orm = orm;
 	DI.em = DI.orm.em;
 	DI.userRepository = DI.orm.em.getRepository(User);
@@ -47,4 +64,4 @@ MikroORM.init().then((orm) => {
 	app.use("/customers", customersRoutes);
 
 	app.use(errorHandler);
-});
+})();

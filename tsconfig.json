@@ -7,14 +7,9 @@
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"outDir": "dist",
-		"emitDecoratorMetadata": true
-
-		// "module": "commonjs",
-		// "esModuleInterop": true,
-		// "target": "es6",
-		// "moduleResolution": "node",
-		// "sourceMap": true,
-		// "outDir": "dist"
+		"emitDecoratorMetadata": true,
+		"resolveJsonModule": true
 	},
-	"lib": ["es2022"]
+	"lib": ["es2022"],
+	"include": ["src/**/*", "src/**/*.json"]
 }

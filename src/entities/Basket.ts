@@ -1,10 +1,10 @@
-import { Collection, Entity, ManyToOne, OneToMany, OneToOne, Property } from "@mikro-orm/core";
+import { Collection, Entity, ManyToOne, OneToMany, Property } from "@mikro-orm/core";
 import { BasketItem, User } from ".";
 import { BaseEntity } from "./BaseEntity";
 
 @Entity()
 export class Basket extends BaseEntity {
-	@Property()
+	@Property({ hidden: true })
 	checkedOut: boolean = false;
 
 	@ManyToOne(() => User, { wrappedReference: true, nullable: false })
