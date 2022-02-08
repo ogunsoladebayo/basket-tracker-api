@@ -2,7 +2,7 @@
 import "dotenv/config";
 
 // dotenv.config();
-import { app, orm } from "./app";
+import { app } from "./app";
 
 // Port Normalization
 const normalizePort = (val: string) => {

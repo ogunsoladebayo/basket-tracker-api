@@ -1,11 +1,9 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, Property } from "@mikro-orm/core";
+import { BaseEntity } from "./BaseEntity";
 
 @Entity()
-export class Item {
-	@PrimaryKey()
-	id!: number;
-
-	@Property()
+export class Item extends BaseEntity {
+	@Property({ unique: true })
 	name!: string;
 
 	@Property()

@@ -1,18 +1,19 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
-import { Basket } from "./Basket";
-import { Item } from "./Item";
+import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import { hidden } from "colors";
+import { Basket, Item } from ".";
+import { BaseEntity } from "./BaseEntity";
 
 @Entity()
-export class BasketItem {
-	@PrimaryKey()
-	id!: number;
-
+export class BasketItem extends BaseEntity {
 	@Property()
 	quantity!: number;
+
+	@Property()
+	active: boolean = true;
 
 	@ManyToOne(() => Item, { wrappedReference: true, nullable: false })
 	item!: Item;
 
-	@ManyToOne(() => Basket, { wrappedReference: true, nullable: false })
+	@ManyToOne(() => Basket, { wrappedReference: true, nullable: false, hidden: true })
 	basket!: Basket;
 }

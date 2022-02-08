@@ -1,18 +1,15 @@
-import { Collection, Entity, OneToMany, OneToOne, PrimaryKey } from "@mikro-orm/core";
-import { BasketItem } from "./BasketItem";
-import { User } from "./User";
+import { Collection, Entity, ManyToOne, OneToMany, OneToOne, Property } from "@mikro-orm/core";
+import { BasketItem, User } from ".";
+import { BaseEntity } from "./BaseEntity";
 
 @Entity()
-export class Basket {
-	@PrimaryKey()
-	id!: number;
+export class Basket extends BaseEntity {
+	@Property()
+	checkedOut: boolean = false;
 
-	@OneToOne(() => User, (user) => user.basket)
+	@ManyToOne(() => User, { wrappedReference: true, nullable: false })
 	user!: User;
 
 	@OneToMany(() => BasketItem, (basketItem) => basketItem.basket)
-	basketItemsToCheckout = new Collection<BasketItem>(this);
-
-	@OneToMany(() => BasketItem, (basketItem) => basketItem.basket)
-	basketItemsRemoved = new Collection<BasketItem>(this);
+	basketItems = new Collection<BasketItem>(this);
 }

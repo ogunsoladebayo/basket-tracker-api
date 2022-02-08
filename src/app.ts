@@ -4,44 +4,47 @@ import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-import { MikroORM, RequestContext } from "@mikro-orm/core";
+import { EntityManager, EntityRepository, MikroORM, RequestContext } from "@mikro-orm/core";
 import errorHandler from "./middlewares/error";
-
-// import { User } from "./entities/User";
-// import { Basket } from "./entities/Basket";
-// import { Item } from "./entities/Item";
-// import { BasketItem } from "./entities/BasketItem";
+import { Basket, BasketItem, Item, User } from "./entities";
 
 dotenv.config();
 
-export const orm = async () =>
-	await MikroORM.init({
-		entities: ["./dist/entities/**/*.js"],
-		entitiesTs: ["./src/entities/**/*.ts"],
-		dbName: process.env.DB_NAME,
-		type: "mysql"
-		// clientUrl: `${process.env.DB_URL}`
-	});
-
 // import routes
+import { authRoutes } from "./routes";
+import { itemsRoutes } from "./routes/items";
 
-export const app = express();
+export const DI = {} as {
+	orm: MikroORM;
+	em: EntityManager;
+	userRepository: EntityRepository<User>;
+	itemRepository: EntityRepository<Item>;
+	basketRepository: EntityRepository<Basket>;
+	basketItemRepository: EntityRepository<BasketItem>;
+};
 
 colors.enable();
+export const app = express();
 
-orm().then((orm) =>
-	app.use((req, res, next) => {
-		RequestContext.create(orm.em, next);
-	})
-);
+MikroORM.init().then((orm) => {
+	DI.orm = orm;
+	DI.em = DI.orm.em;
+	DI.userRepository = DI.orm.em.getRepository(User);
+	DI.itemRepository = DI.orm.em.getRepository(Item);
+	DI.basketRepository = DI.orm.em.getRepository(Basket);
+	DI.basketItemRepository = DI.orm.em.getRepository(BasketItem);
 
-app.use(morgan("tiny"));
+	app.use(express.json());
+	app.use((req, res, next) => RequestContext.create(DI.orm.em, next));
+	app.use(morgan("tiny"));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-app.use(helmet());
+	app.use(express.urlencoded({ extended: false }));
+	app.use(cors());
+	app.use(helmet());
 
-// mount routes
+	// mount routes
+	app.use("/auth", authRoutes);
+	app.use("/items", itemsRoutes);
 
-app.use(errorHandler);
+	app.use(errorHandler);
+});
