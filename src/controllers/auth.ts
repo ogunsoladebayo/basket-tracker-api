@@ -61,7 +61,6 @@ export const register = asyncHandler(async (req, res, next) => {
 	}
 
 	const user = new User(username, password);
-	// wrap(user).assign(req.body);
 	await DI.userRepository.persistAndFlush(user);
 
 	res.status(201)

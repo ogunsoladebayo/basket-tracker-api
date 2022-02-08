@@ -12,7 +12,7 @@ dotenv.config();
 
 // import routes
 import { authRoutes } from "./routes";
-import { itemsRoutes } from "./routes/items";
+import { itemsRoutes as customersRoutes } from "./routes/items";
 
 export const DI = {} as {
 	orm: MikroORM;
@@ -44,7 +44,7 @@ MikroORM.init().then((orm) => {
 
 	// mount routes
 	app.use("/auth", authRoutes);
-	app.use("/items", itemsRoutes);
+	app.use("/customers", customersRoutes);
 
 	app.use(errorHandler);
 });

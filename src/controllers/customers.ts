@@ -7,7 +7,7 @@ import ErrorResponse from "../utils/errorResponse";
 
 /**
  *  @desc      All products
- *  @route     POST /items/list
+ *  @route     GET /customers/items/all
  *  @access    Public
  * */
 export const allItems = asyncHandler(async (req: Request, res: Response, next) => {
@@ -18,7 +18,7 @@ export const allItems = asyncHandler(async (req: Request, res: Response, next) =
 
 /**
  *  @desc      Add an item to basket
- *  @route     POST /items/add/Id
+ *  @route     POST /customers/items:id
  *  @access    Logged in customer
  * */
 export const addItemToBasket = asyncHandler(async (req: Request, res: Response, next) => {
@@ -60,7 +60,7 @@ export const addItemToBasket = asyncHandler(async (req: Request, res: Response, 
 
 /**
  *  @desc      Remove an item from basket
- *  @route     POST /items/remove/:Id
+ *  @route     DELETE /customers/items/iId
  *  @access    Logged in customer
  * */
 export const removeItemFromBasket = asyncHandler(async (req: Request, res: Response, next) => {
@@ -77,15 +77,38 @@ export const removeItemFromBasket = asyncHandler(async (req: Request, res: Respo
 	basketItem.active = false;
 
 	await DI.basketItemRepository.flush();
+	DI.em.map;
 
-	const basket = await DI.basketRepository.findOne(
-		{ user: req.body.user.id, checkedOut: false, basketItems: { active: true } },
-		{ fields: [{ basketItems: ["quantity", "item"] }] }
+	const basketItems = await DI.basketItemRepository.find(
+		{ basket: basketItem.basket, active: true },
+		{ fields: ["quantity", "item"] }
 	);
 
 	res.status(200).json({
 		success: true,
 		message: "Items was successfully removed from basket.",
-		data: basket.basketItems
+		data: { basketItems }
+	});
+});
+
+/**
+ *  @desc      Proceed to check out
+ *  @route     POST /customers/checkout
+ *  @access    Logged in customer
+ * */
+export const checkout = asyncHandler(async (req: Request, res: Response, next) => {
+	const basket = await DI.basketRepository.findOne({
+		user: req.body.user.id,
+		checkedOut: false
+	});
+
+	if (!basket) return next(new ErrorResponse("Sorry, you have not added any item to your basket", 400));
+
+	basket.checkedOut = true;
+	await DI.basketItemRepository.flush();
+
+	res.status(200).json({
+		success: true,
+		message: "proceeding to payment page..."
 	});
 });
