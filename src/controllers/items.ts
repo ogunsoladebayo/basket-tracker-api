@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { DI } from "../app";
 import { Basket, BasketItem } from "../entities";
 import asyncHandler from "../middlewares/asyncHandler";
+import ErrorResponse from "../utils/errorResponse";
 
 /**
  *  @desc      All products
@@ -64,11 +65,13 @@ export const addItemToBasket = asyncHandler(async (req: Request, res: Response, 
  * */
 export const removeItemFromBasket = asyncHandler(async (req: Request, res: Response, next) => {
 	// find the item from the user's active basket
-	var basketItem = await DI.basketItemRepository.findOneOrFail({
+	var basketItem = await DI.basketItemRepository.findOne({
 		basket: { user: req.body.user, checkedOut: false },
 		item: { id: parseInt(req.params.id) },
 		active: true
 	});
+
+	if (!basketItem) return next(new ErrorResponse(`Item with id ${req.params.id} not added to basket`, 400));
 
 	// set the basket item active property to false
 	basketItem.active = false;
