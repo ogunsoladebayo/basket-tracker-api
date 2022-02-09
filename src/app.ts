@@ -33,7 +33,14 @@ export const app = express();
 (async () => {
 	const orm = await MikroORM.init({
 		driver: PostgreSqlDriver,
-		driverOptions: { connection: { ssl: true } },
+		driverOptions: {
+			connection: {
+				ssl: {
+					require: true,
+					rejectUnauthorized: false
+				}
+			}
+		},
 		entities: ["./dist/entities"],
 		entitiesTs: ["./src/entities"],
 		migrations: {
