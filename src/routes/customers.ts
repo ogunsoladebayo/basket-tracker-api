@@ -11,7 +11,7 @@ import { authorize, protect } from "../middlewares/auth";
 
 const Router = express.Router();
 
-export const itemsRoutes = Router.get("/items/all", allItems)
+export const customersRoutes = Router.get("/items/all", allItems)
 	.post("/items/:id", protect, authorize(UserRole.CUSTOMER), addItemToBasket)
 	.patch("/items/:id", protect, authorize(UserRole.CUSTOMER), modifyItemQuantity)
 	.delete("/items/:id", protect, authorize(UserRole.CUSTOMER), removeItemFromBasket)

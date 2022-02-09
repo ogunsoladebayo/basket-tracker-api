@@ -5,6 +5,6 @@ import { User } from "./entities/User";
 
 export default {
 	entities: [User, Basket, BasketItem, Item],
-	dbName: "BasketTracker",
+	dbName: "BasketTrackerDB",
 	type: "postgresql"
 };

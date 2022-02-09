@@ -13,7 +13,7 @@ export const protect = async (req: Request, res: Response, next) => {
 
 	// Make sure token exists
 	if (!token) {
-		return next(new ErrorResponse("Not authorized to access this route", 401));
+		return next(new ErrorResponse("Not authorized to access this resource", 401));
 	}
 
 	try {
@@ -35,7 +35,7 @@ export const protect = async (req: Request, res: Response, next) => {
 export const authorize = (...roles: UserRole[]) => {
 	return async (req: Request, res: Response, next) => {
 		if (!roles.includes(req.body.user?.role)) {
-			return next(new ErrorResponse(`You are not authorized to access this resource`, 403));
+			return next(new ErrorResponse(`You do not have permissions to access this resource`, 403));
 		}
 		next();
 	};

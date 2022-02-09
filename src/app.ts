@@ -11,9 +11,9 @@ import { Basket, BasketItem, Item, User } from "./entities";
 dotenv.config();
 
 // import routes
-import { authRoutes } from "./routes";
-import { itemsRoutes as customersRoutes } from "./routes/items";
+import { authRoutes, customersRoutes, salesRoutes } from "./routes";
 import { ItemSeeder } from "./seeders/item.seeder";
+import { UserSeeder } from "./seeders/user.seeder";
 
 export const DI = {} as {
 	orm: MikroORM;
@@ -42,7 +42,7 @@ export const app = express();
 	await migrator.up();
 
 	const seeder = orm.getSeeder();
-	await seeder.seed(ItemSeeder);
+	await seeder.seed(UserSeeder, ItemSeeder);
 
 	DI.orm = orm;
 	DI.em = DI.orm.em;
@@ -62,6 +62,7 @@ export const app = express();
 	// mount routes
 	app.use("/auth", authRoutes);
 	app.use("/customers", customersRoutes);
+	app.use("/sales", salesRoutes);
 
 	app.use(errorHandler);
 })();

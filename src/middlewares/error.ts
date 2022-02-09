@@ -21,6 +21,11 @@ const errorHandler = (err, req, res, next) => {
 			success: false,
 			message: "One or more required fields are not provided"
 		});
+	} else if (error.name === "InvalidFieldNameException") {
+		res.status(400).json({
+			success: false,
+			message: "One  or more request fields are not provided in the correct format"
+		});
 	} else if (error.name === "NotFoundError") {
 		res.status(400).json({
 			success: false,

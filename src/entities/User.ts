@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
-import { Collection, Entity, Enum, OneToMany, Property } from "@mikro-orm/core";
+import { Collection, Entity, Enum, OneToMany, Property, wrap } from "@mikro-orm/core";
 import { Basket } from ".";
 import { BaseEntity } from "./BaseEntity";
 
@@ -9,7 +9,7 @@ export class User extends BaseEntity {
 	@Property({ unique: true })
 	username!: string;
 	@Property({ hidden: true })
-	hashedPassword: string;
+	hashedPassword?: string;
 
 	@Property({ hidden: true, persist: false })
 	set password(value: string) {
@@ -19,7 +19,7 @@ export class User extends BaseEntity {
 	}
 
 	@Enum(() => UserRole)
-	role?: UserRole = UserRole.CUSTOMER;
+	role: UserRole = UserRole.CUSTOMER;
 
 	@Property({ persist: false })
 	get token() {
@@ -35,6 +35,16 @@ export class User extends BaseEntity {
 		super();
 		this.username = username;
 		this.password = password;
+	}
+
+	toJSON(strict = true, strip = ["role", "token"], ...args: any[]): { [p: string]: any } {
+		const o = wrap(this, true).toObject(...args);
+
+		if (strict) {
+			strip.forEach((k) => delete o[k]);
+		}
+
+		return o;
 	}
 }
 
