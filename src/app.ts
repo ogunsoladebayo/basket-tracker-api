@@ -45,7 +45,8 @@ export const app = express();
 		entitiesTs: ["./src/entities"],
 		migrations: {
 			path: "./dist/migrations",
-			pathTs: "./src/migrations"
+			pathTs: "./src/migrations",
+			disableForeignKeys: false
 		}
 	});
 
