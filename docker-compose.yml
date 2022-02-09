@@ -8,7 +8,6 @@ services:
         depends_on:
             - postgres
         environment:
-            DATABASE_URL: postgres://postgres:BAsketTrAckErApP@postgres:5439/basketTrackerDB
             NODE_ENV: production
             PORT: 4000
             MIKRO_ORM_TYPE: postgresql
@@ -25,7 +24,7 @@ services:
         container_name: postgres
         image: postgres:10.4
         ports:
-            - "5439:5439"
+            - "5432:5432"
         volumes:
             - ~/postgresdata:/var/lib/postgresql/data
         restart: always

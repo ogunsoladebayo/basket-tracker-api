@@ -16,6 +16,7 @@ dotenv.config();
 import { authRoutes, customersRoutes, salesRoutes } from "./routes";
 import { ItemSeeder } from "./seeders/item.seeder";
 import { UserSeeder } from "./seeders/user.seeder";
+import { PostgreSqlDriver } from "@mikro-orm/postgresql";
 
 export const DI = {} as {
 	orm: MikroORM;
@@ -31,6 +32,8 @@ export const app = express();
 
 (async () => {
 	const orm = await MikroORM.init({
+		driver: PostgreSqlDriver,
+		driverOptions: { connection: { ssl: true } },
 		entities: ["./dist/entities"],
 		entitiesTs: ["./src/entities"],
 		migrations: {
