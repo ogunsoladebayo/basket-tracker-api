@@ -11,5 +11,5 @@
 		"resolveJsonModule": true
 	},
 	"lib": ["es2022"],
-	"include": ["src/**/*", "src/**/*.json"]
+	"include": ["src/**/*", "src/**/*.json", "src/swagger.ts"]
 }

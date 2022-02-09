@@ -1,0 +1,1489 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Basket Tracker API",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:3000"
+		},
+		{
+			"url": "http://localhost:4000"
+		}
+	],
+	"components": {
+		"securitySchemes": {
+			"noauthAuth": {
+				"type": "http",
+				"scheme": "noauth"
+			},
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer"
+			}
+		}
+	},
+	"security": [
+		{
+			"bearerAuth": []
+		}
+	],
+	"tags": [
+		{
+			"name": "Customers"
+		},
+		{
+			"name": "Authentication"
+		},
+		{
+			"name": "Sales"
+		}
+	],
+	"paths": {
+		"/auth/register": {
+			"post": {
+				"tags": ["Customers"],
+				"summary": "Register",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"example": {
+									"username": "johndoe",
+									"password": "JohnDoe-1"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {}
+						}
+					}
+				}
+			}
+		},
+		"/customers/items/all": {
+			"get": {
+				"tags": ["Customers"],
+				"summary": "All Items",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"schema": {
+									"type": "string",
+									"example": "*"
+								}
+							},
+							"Content-Security-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								}
+							},
+							"Cross-Origin-Embedder-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "require-corp"
+								}
+							},
+							"Cross-Origin-Opener-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"Cross-Origin-Resource-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"X-DNS-Prefetch-Control": {
+								"schema": {
+									"type": "string",
+									"example": "off"
+								}
+							},
+							"Expect-CT": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=0"
+								}
+							},
+							"X-Frame-Options": {
+								"schema": {
+									"type": "string",
+									"example": "SAMEORIGIN"
+								}
+							},
+							"Strict-Transport-Security": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=15552000; includeSubDomains"
+								}
+							},
+							"X-Download-Options": {
+								"schema": {
+									"type": "string",
+									"example": "noopen"
+								}
+							},
+							"X-Content-Type-Options": {
+								"schema": {
+									"type": "string",
+									"example": "nosniff"
+								}
+							},
+							"Origin-Agent-Cluster": {
+								"schema": {
+									"type": "string",
+									"example": "?1"
+								}
+							},
+							"X-Permitted-Cross-Domain-Policies": {
+								"schema": {
+									"type": "string",
+									"example": "none"
+								}
+							},
+							"Referrer-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "no-referrer"
+								}
+							},
+							"X-XSS-Protection": {
+								"schema": {
+									"type": "integer",
+									"example": "0"
+								}
+							},
+							"Content-Type": {
+								"schema": {
+									"type": "string",
+									"example": "application/json; charset=utf-8"
+								}
+							},
+							"Content-Length": {
+								"schema": {
+									"type": "integer",
+									"example": "307"
+								}
+							},
+							"ETag": {
+								"schema": {
+									"type": "string",
+									"example": "W/\"133-YJrlHmCCV0JEwb4iYct4DqeM9S8\""
+								}
+							},
+							"Date": {
+								"schema": {
+									"type": "string",
+									"example": "Wed, 09 Feb 2022 02:39:17 GMT"
+								}
+							},
+							"Connection": {
+								"schema": {
+									"type": "string",
+									"example": "keep-alive"
+								}
+							},
+							"Keep-Alive": {
+								"schema": {
+									"type": "string",
+									"example": "timeout=5"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"success": true,
+									"message": "Items fetched successfully.",
+									"data": [
+										{
+											"id": 6,
+											"name": "Pioneer DJ Mixer",
+											"price": 699
+										},
+										{
+											"id": 7,
+											"name": "Roland Wave Sampler",
+											"price": 485
+										},
+										{
+											"id": 8,
+											"name": "Reloop Headphone",
+											"price": 159
+										},
+										{
+											"id": 9,
+											"name": "Rokit Monitor",
+											"price": 190
+										},
+										{
+											"id": 10,
+											"name": "Fisherprice Baby Mixer",
+											"price": 120
+										}
+									]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/customers/items/{id}": {
+			"post": {
+				"tags": ["Customers"],
+				"summary": "Add item to basket",
+				"description": "Accepts optional request body property 'quantity' which defaults to 1",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"example": {
+									"quantity": 3
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"schema": {
+									"type": "string",
+									"example": "*"
+								}
+							},
+							"Content-Security-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								}
+							},
+							"Cross-Origin-Embedder-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "require-corp"
+								}
+							},
+							"Cross-Origin-Opener-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"Cross-Origin-Resource-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"X-DNS-Prefetch-Control": {
+								"schema": {
+									"type": "string",
+									"example": "off"
+								}
+							},
+							"Expect-CT": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=0"
+								}
+							},
+							"X-Frame-Options": {
+								"schema": {
+									"type": "string",
+									"example": "SAMEORIGIN"
+								}
+							},
+							"Strict-Transport-Security": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=15552000; includeSubDomains"
+								}
+							},
+							"X-Download-Options": {
+								"schema": {
+									"type": "string",
+									"example": "noopen"
+								}
+							},
+							"X-Content-Type-Options": {
+								"schema": {
+									"type": "string",
+									"example": "nosniff"
+								}
+							},
+							"Origin-Agent-Cluster": {
+								"schema": {
+									"type": "string",
+									"example": "?1"
+								}
+							},
+							"X-Permitted-Cross-Domain-Policies": {
+								"schema": {
+									"type": "string",
+									"example": "none"
+								}
+							},
+							"Referrer-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "no-referrer"
+								}
+							},
+							"X-XSS-Protection": {
+								"schema": {
+									"type": "integer",
+									"example": "0"
+								}
+							},
+							"Content-Type": {
+								"schema": {
+									"type": "string",
+									"example": "application/json; charset=utf-8"
+								}
+							},
+							"Content-Length": {
+								"schema": {
+									"type": "integer",
+									"example": "263"
+								}
+							},
+							"ETag": {
+								"schema": {
+									"type": "string",
+									"example": "W/\"107-5w4Abd/UCtbZDZNDhPdHmr2WFAw\""
+								}
+							},
+							"Date": {
+								"schema": {
+									"type": "string",
+									"example": "Wed, 09 Feb 2022 02:39:47 GMT"
+								}
+							},
+							"Connection": {
+								"schema": {
+									"type": "string",
+									"example": "keep-alive"
+								}
+							},
+							"Keep-Alive": {
+								"schema": {
+									"type": "string",
+									"example": "timeout=5"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"success": true,
+									"message": "Item was successfully added to basket.",
+									"data": [
+										{
+											"id": 7,
+											"quantity": 4,
+											"item": {
+												"id": 8,
+												"name": "Reloop Headphone",
+												"price": 159
+											}
+										},
+										{
+											"id": 1,
+											"quantity": 15,
+											"item": {
+												"id": 7,
+												"name": "Roland Wave Sampler",
+												"price": 485
+											}
+										},
+										{
+											"id": 8,
+											"quantity": 1,
+											"item": 6
+										}
+									]
+								}
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"tags": ["Customers"],
+				"summary": "Modify item quantity in basket",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"example": {
+									"quantity": 7
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"schema": {
+									"type": "string",
+									"example": "*"
+								}
+							},
+							"Content-Security-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								}
+							},
+							"Cross-Origin-Embedder-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "require-corp"
+								}
+							},
+							"Cross-Origin-Opener-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"Cross-Origin-Resource-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"X-DNS-Prefetch-Control": {
+								"schema": {
+									"type": "string",
+									"example": "off"
+								}
+							},
+							"Expect-CT": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=0"
+								}
+							},
+							"X-Frame-Options": {
+								"schema": {
+									"type": "string",
+									"example": "SAMEORIGIN"
+								}
+							},
+							"Strict-Transport-Security": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=15552000; includeSubDomains"
+								}
+							},
+							"X-Download-Options": {
+								"schema": {
+									"type": "string",
+									"example": "noopen"
+								}
+							},
+							"X-Content-Type-Options": {
+								"schema": {
+									"type": "string",
+									"example": "nosniff"
+								}
+							},
+							"Origin-Agent-Cluster": {
+								"schema": {
+									"type": "string",
+									"example": "?1"
+								}
+							},
+							"X-Permitted-Cross-Domain-Policies": {
+								"schema": {
+									"type": "string",
+									"example": "none"
+								}
+							},
+							"Referrer-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "no-referrer"
+								}
+							},
+							"X-XSS-Protection": {
+								"schema": {
+									"type": "integer",
+									"example": "0"
+								}
+							},
+							"Content-Type": {
+								"schema": {
+									"type": "string",
+									"example": "application/json; charset=utf-8"
+								}
+							},
+							"Content-Length": {
+								"schema": {
+									"type": "integer",
+									"example": "323"
+								}
+							},
+							"ETag": {
+								"schema": {
+									"type": "string",
+									"example": "W/\"143-tNvq95W7dzP4ESmkjW9FrH0Wa68\""
+								}
+							},
+							"Date": {
+								"schema": {
+									"type": "string",
+									"example": "Wed, 09 Feb 2022 02:46:01 GMT"
+								}
+							},
+							"Connection": {
+								"schema": {
+									"type": "string",
+									"example": "keep-alive"
+								}
+							},
+							"Keep-Alive": {
+								"schema": {
+									"type": "string",
+									"example": "timeout=5"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"success": true,
+									"message": "Basket has been updated successfully.",
+									"data": {
+										"basketItems": [
+											{
+												"id": 1,
+												"quantity": 15,
+												"item": {
+													"id": 7,
+													"name": "Roland Wave Sampler",
+													"price": 485
+												}
+											},
+											{
+												"id": 8,
+												"quantity": 1,
+												"item": {
+													"id": 6,
+													"name": "Pioneer DJ Mixer",
+													"price": 699
+												}
+											},
+											{
+												"id": 7,
+												"quantity": 7,
+												"item": {
+													"id": 8,
+													"name": "Reloop Headphone",
+													"price": 159
+												}
+											}
+										]
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Customers"],
+				"summary": "Remove item from basket",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"schema": {
+									"type": "string",
+									"example": "*"
+								}
+							},
+							"Content-Security-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								}
+							},
+							"Cross-Origin-Embedder-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "require-corp"
+								}
+							},
+							"Cross-Origin-Opener-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"Cross-Origin-Resource-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"X-DNS-Prefetch-Control": {
+								"schema": {
+									"type": "string",
+									"example": "off"
+								}
+							},
+							"Expect-CT": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=0"
+								}
+							},
+							"X-Frame-Options": {
+								"schema": {
+									"type": "string",
+									"example": "SAMEORIGIN"
+								}
+							},
+							"Strict-Transport-Security": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=15552000; includeSubDomains"
+								}
+							},
+							"X-Download-Options": {
+								"schema": {
+									"type": "string",
+									"example": "noopen"
+								}
+							},
+							"X-Content-Type-Options": {
+								"schema": {
+									"type": "string",
+									"example": "nosniff"
+								}
+							},
+							"Origin-Agent-Cluster": {
+								"schema": {
+									"type": "string",
+									"example": "?1"
+								}
+							},
+							"X-Permitted-Cross-Domain-Policies": {
+								"schema": {
+									"type": "string",
+									"example": "none"
+								}
+							},
+							"Referrer-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "no-referrer"
+								}
+							},
+							"X-XSS-Protection": {
+								"schema": {
+									"type": "integer",
+									"example": "0"
+								}
+							},
+							"Content-Type": {
+								"schema": {
+									"type": "string",
+									"example": "application/json; charset=utf-8"
+								}
+							},
+							"Content-Length": {
+								"schema": {
+									"type": "integer",
+									"example": "252"
+								}
+							},
+							"ETag": {
+								"schema": {
+									"type": "string",
+									"example": "W/\"fc-uaMFtdOymv42lm13/UIZik5Tito\""
+								}
+							},
+							"Date": {
+								"schema": {
+									"type": "string",
+									"example": "Wed, 09 Feb 2022 02:46:42 GMT"
+								}
+							},
+							"Connection": {
+								"schema": {
+									"type": "string",
+									"example": "keep-alive"
+								}
+							},
+							"Keep-Alive": {
+								"schema": {
+									"type": "string",
+									"example": "timeout=5"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"success": true,
+									"message": "Item was successfully removed from basket.",
+									"data": {
+										"basketItems": [
+											{
+												"id": 1,
+												"quantity": 15,
+												"item": {
+													"id": 7,
+													"name": "Roland Wave Sampler",
+													"price": 485
+												}
+											},
+											{
+												"id": 8,
+												"quantity": 1,
+												"item": {
+													"id": 6,
+													"name": "Pioneer DJ Mixer",
+													"price": 699
+												}
+											}
+										]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/customers/checkout": {
+			"post": {
+				"tags": ["Customers"],
+				"summary": "Checkout",
+				"requestBody": {
+					"content": {}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"schema": {
+									"type": "string",
+									"example": "*"
+								}
+							},
+							"Content-Security-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								}
+							},
+							"Cross-Origin-Embedder-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "require-corp"
+								}
+							},
+							"Cross-Origin-Opener-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"Cross-Origin-Resource-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"X-DNS-Prefetch-Control": {
+								"schema": {
+									"type": "string",
+									"example": "off"
+								}
+							},
+							"Expect-CT": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=0"
+								}
+							},
+							"X-Frame-Options": {
+								"schema": {
+									"type": "string",
+									"example": "SAMEORIGIN"
+								}
+							},
+							"Strict-Transport-Security": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=15552000; includeSubDomains"
+								}
+							},
+							"X-Download-Options": {
+								"schema": {
+									"type": "string",
+									"example": "noopen"
+								}
+							},
+							"X-Content-Type-Options": {
+								"schema": {
+									"type": "string",
+									"example": "nosniff"
+								}
+							},
+							"Origin-Agent-Cluster": {
+								"schema": {
+									"type": "string",
+									"example": "?1"
+								}
+							},
+							"X-Permitted-Cross-Domain-Policies": {
+								"schema": {
+									"type": "string",
+									"example": "none"
+								}
+							},
+							"Referrer-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "no-referrer"
+								}
+							},
+							"X-XSS-Protection": {
+								"schema": {
+									"type": "integer",
+									"example": "0"
+								}
+							},
+							"Content-Type": {
+								"schema": {
+									"type": "string",
+									"example": "application/json; charset=utf-8"
+								}
+							},
+							"Content-Length": {
+								"schema": {
+									"type": "integer",
+									"example": "58"
+								}
+							},
+							"ETag": {
+								"schema": {
+									"type": "string",
+									"example": "W/\"3a-rTi7fs9PdSyOZYl+OOkjpNWHo90\""
+								}
+							},
+							"Date": {
+								"schema": {
+									"type": "string",
+									"example": "Wed, 09 Feb 2022 02:47:35 GMT"
+								}
+							},
+							"Connection": {
+								"schema": {
+									"type": "string",
+									"example": "keep-alive"
+								}
+							},
+							"Keep-Alive": {
+								"schema": {
+									"type": "string",
+									"example": "timeout=5"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"success": true,
+									"message": "proceeding to payment page..."
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"tags": ["Authentication"],
+				"summary": "Login",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"example": {
+									"username": "johndoe",
+									"password": "JohnDoe-1"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"noauthAuth": []
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Created",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"schema": {
+									"type": "string",
+									"example": "*"
+								}
+							},
+							"Content-Security-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								}
+							},
+							"Cross-Origin-Embedder-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "require-corp"
+								}
+							},
+							"Cross-Origin-Opener-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"Cross-Origin-Resource-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"X-DNS-Prefetch-Control": {
+								"schema": {
+									"type": "string",
+									"example": "off"
+								}
+							},
+							"Expect-CT": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=0"
+								}
+							},
+							"X-Frame-Options": {
+								"schema": {
+									"type": "string",
+									"example": "SAMEORIGIN"
+								}
+							},
+							"Strict-Transport-Security": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=15552000; includeSubDomains"
+								}
+							},
+							"X-Download-Options": {
+								"schema": {
+									"type": "string",
+									"example": "noopen"
+								}
+							},
+							"X-Content-Type-Options": {
+								"schema": {
+									"type": "string",
+									"example": "nosniff"
+								}
+							},
+							"Origin-Agent-Cluster": {
+								"schema": {
+									"type": "string",
+									"example": "?1"
+								}
+							},
+							"X-Permitted-Cross-Domain-Policies": {
+								"schema": {
+									"type": "string",
+									"example": "none"
+								}
+							},
+							"Referrer-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "no-referrer"
+								}
+							},
+							"X-XSS-Protection": {
+								"schema": {
+									"type": "integer",
+									"example": "0"
+								}
+							},
+							"Set-Cookie": {
+								"schema": {
+									"type": "string",
+									"example": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ0Mzc0MzA3LCJleHAiOjE2NDQ5NzkxMDd9.eFvNDswq0mwneWagw882rn-FuPlK23HWcHuRlLFgFLc; Domain=localhost; Path=/"
+								}
+							},
+							"Content-Type": {
+								"schema": {
+									"type": "string",
+									"example": "application/json; charset=utf-8"
+								}
+							},
+							"Content-Length": {
+								"schema": {
+									"type": "integer",
+									"example": "45"
+								}
+							},
+							"ETag": {
+								"schema": {
+									"type": "string",
+									"example": "W/\"2d-tdQEKjo1FqK2o+AjP2Hiq4ZMp2w\""
+								}
+							},
+							"Date": {
+								"schema": {
+									"type": "string",
+									"example": "Wed, 09 Feb 2022 02:38:27 GMT"
+								}
+							},
+							"Connection": {
+								"schema": {
+									"type": "string",
+									"example": "keep-alive"
+								}
+							},
+							"Keep-Alive": {
+								"schema": {
+									"type": "string",
+									"example": "timeout=5"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"success": true,
+									"message": "Login successful"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/sales/customers/all": {
+			"get": {
+				"tags": ["Sales"],
+				"summary": "All customers",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"schema": {
+									"type": "string",
+									"example": "*"
+								}
+							},
+							"Content-Security-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								}
+							},
+							"Cross-Origin-Embedder-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "require-corp"
+								}
+							},
+							"Cross-Origin-Opener-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"Cross-Origin-Resource-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"X-DNS-Prefetch-Control": {
+								"schema": {
+									"type": "string",
+									"example": "off"
+								}
+							},
+							"Expect-CT": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=0"
+								}
+							},
+							"X-Frame-Options": {
+								"schema": {
+									"type": "string",
+									"example": "SAMEORIGIN"
+								}
+							},
+							"Strict-Transport-Security": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=15552000; includeSubDomains"
+								}
+							},
+							"X-Download-Options": {
+								"schema": {
+									"type": "string",
+									"example": "noopen"
+								}
+							},
+							"X-Content-Type-Options": {
+								"schema": {
+									"type": "string",
+									"example": "nosniff"
+								}
+							},
+							"Origin-Agent-Cluster": {
+								"schema": {
+									"type": "string",
+									"example": "?1"
+								}
+							},
+							"X-Permitted-Cross-Domain-Policies": {
+								"schema": {
+									"type": "string",
+									"example": "none"
+								}
+							},
+							"Referrer-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "no-referrer"
+								}
+							},
+							"X-XSS-Protection": {
+								"schema": {
+									"type": "integer",
+									"example": "0"
+								}
+							},
+							"Content-Type": {
+								"schema": {
+									"type": "string",
+									"example": "application/json; charset=utf-8"
+								}
+							},
+							"Content-Length": {
+								"schema": {
+									"type": "integer",
+									"example": "99"
+								}
+							},
+							"ETag": {
+								"schema": {
+									"type": "string",
+									"example": "W/\"63-ZL7UAUnl0cMCmp3jsLUL7d/qivI\""
+								}
+							},
+							"Date": {
+								"schema": {
+									"type": "string",
+									"example": "Wed, 09 Feb 2022 02:38:08 GMT"
+								}
+							},
+							"Connection": {
+								"schema": {
+									"type": "string",
+									"example": "keep-alive"
+								}
+							},
+							"Keep-Alive": {
+								"schema": {
+									"type": "string",
+									"example": "timeout=5"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"success": true,
+									"message": "customers fetched successfully.",
+									"data": [
+										{
+											"id": 1,
+											"username": "johndoe"
+										}
+									]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/sales/customers/removed-items/{id}": {
+			"get": {
+				"tags": ["Sales"],
+				"summary": "Customer items removed before checkout",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": {
+							"type": "string"
+						},
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"schema": {
+									"type": "string",
+									"example": "*"
+								}
+							},
+							"Content-Security-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								}
+							},
+							"Cross-Origin-Embedder-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "require-corp"
+								}
+							},
+							"Cross-Origin-Opener-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"Cross-Origin-Resource-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "same-origin"
+								}
+							},
+							"X-DNS-Prefetch-Control": {
+								"schema": {
+									"type": "string",
+									"example": "off"
+								}
+							},
+							"Expect-CT": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=0"
+								}
+							},
+							"X-Frame-Options": {
+								"schema": {
+									"type": "string",
+									"example": "SAMEORIGIN"
+								}
+							},
+							"Strict-Transport-Security": {
+								"schema": {
+									"type": "string",
+									"example": "max-age=15552000; includeSubDomains"
+								}
+							},
+							"X-Download-Options": {
+								"schema": {
+									"type": "string",
+									"example": "noopen"
+								}
+							},
+							"X-Content-Type-Options": {
+								"schema": {
+									"type": "string",
+									"example": "nosniff"
+								}
+							},
+							"Origin-Agent-Cluster": {
+								"schema": {
+									"type": "string",
+									"example": "?1"
+								}
+							},
+							"X-Permitted-Cross-Domain-Policies": {
+								"schema": {
+									"type": "string",
+									"example": "none"
+								}
+							},
+							"Referrer-Policy": {
+								"schema": {
+									"type": "string",
+									"example": "no-referrer"
+								}
+							},
+							"X-XSS-Protection": {
+								"schema": {
+									"type": "integer",
+									"example": "0"
+								}
+							},
+							"Content-Type": {
+								"schema": {
+									"type": "string",
+									"example": "application/json; charset=utf-8"
+								}
+							},
+							"Content-Length": {
+								"schema": {
+									"type": "integer",
+									"example": "211"
+								}
+							},
+							"ETag": {
+								"schema": {
+									"type": "string",
+									"example": "W/\"d3-jcopCbyag0RJ7OkqaCqfeEHUgQ4\""
+								}
+							},
+							"Date": {
+								"schema": {
+									"type": "string",
+									"example": "Wed, 09 Feb 2022 02:37:45 GMT"
+								}
+							},
+							"Connection": {
+								"schema": {
+									"type": "string",
+									"example": "keep-alive"
+								}
+							},
+							"Keep-Alive": {
+								"schema": {
+									"type": "string",
+									"example": "timeout=5"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								},
+								"example": {
+									"success": true,
+									"message": "basket items removed by user fetched successfully.",
+									"data": [
+										{
+											"id": 9,
+											"item": {
+												"id": 9,
+												"name": "Rokit Monitor",
+												"price": 190
+											}
+										},
+										{
+											"id": 8,
+											"item": {
+												"id": 6,
+												"name": "Pioneer DJ Mixer",
+												"price": 699
+											}
+										}
+									]
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -44,7 +44,7 @@ export const login = asyncHandler(async (req: Request, res: Response, next) => {
  *  @route     POST /auth/register
  *  @access    Public
  * */
-export const register = asyncHandler(async (req, res, next) => {
+export const register = asyncHandler(async (req: Request, res: Response, next) => {
 	const { username, password } = req.body;
 
 	// Validate email & password

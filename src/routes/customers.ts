@@ -15,5 +15,4 @@ export const customersRoutes = Router.get("/items/all", allItems)
 	.post("/items/:id", protect, authorize(UserRole.CUSTOMER), addItemToBasket)
 	.patch("/items/:id", protect, authorize(UserRole.CUSTOMER), modifyItemQuantity)
 	.delete("/items/:id", protect, authorize(UserRole.CUSTOMER), removeItemFromBasket)
-	.delete("/items/:id", protect, authorize(UserRole.CUSTOMER), removeItemFromBasket)
 	.post("/checkout", protect, authorize(UserRole.CUSTOMER), checkout);

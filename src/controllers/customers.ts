@@ -96,7 +96,7 @@ export const modifyItemQuantity = asyncHandler(async (req: Request, res: Respons
 
 	res.status(200).json({
 		success: true,
-		message: "Items was successfully removed from basket.",
+		message: "Basket has been updated successfully.",
 		data: { basketItems }
 	});
 });
@@ -128,7 +128,7 @@ export const removeItemFromBasket = asyncHandler(async (req: Request, res: Respo
 
 	res.status(200).json({
 		success: true,
-		message: "Items was successfully removed from basket.",
+		message: "Item was successfully removed from basket.",
 		data: { basketItems }
 	});
 });
